@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" ng-app="usability_test">
+  <head>
+    <meta charset="utf-8">
+    <link href="./style.css" type="text/css" rel="stylesheet" />
+    <link href="./slider-style.css" type="text/css" rel="stylesheet" />
+    <title>Usability experiment</title>
+  </head>
+  <body>
+    <div class="row tab_container" ng-controller="TabController">
+        <ul id="tabs">
+            <li ng-repeat="tab in tabs" ng-class="{active: isSet(this.$index)}">
+                <a href ng-click="setTab(this.$index)" data-id="{{tab.id}}">{{tab.title}}</a>
+            </li>
+        </ul>
+        <div ng-repeat="tab in tabs">
+            <div ng-show="isSet({{this.$index}})">
+                <div ng-include="'view' + this.$index + '.html'"></div>
+            </div>
+        </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="./tabs.js"></script>
+  <script src="./create_components.js"></script>
+  <script>
+    //document.getElementById("view0").appendChild(component_creator.getInstance().createSlider());
+    //document.getElementById("controls").appendChild(component_creator.getInstance().createSwitch());
+    //document.getElementById("controls").appendChild(component_creator.getInstance().createTable());
+  </script>
+</html>
