@@ -45,6 +45,12 @@ body {
     margin: auto;
 }
 
+@media(max-width: 600px) {
+	.tab_container {
+    	width: 100%;
+	}
+}
+
 span.slider {
     display: inline-block;
     width: 15%;
