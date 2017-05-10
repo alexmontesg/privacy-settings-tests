@@ -7,6 +7,12 @@
     border-width: 1px;
 }
 
+@media(max-width: 600px) {
+	.tab_container {
+    	width: 100%;
+	}
+}
+
 body {
     background-color: #fafafa;
     padding-top: 20px;
@@ -38,44 +44,4 @@ body {
 
 #view0 {
     padding-top: 1.5em;
-}
-
-.slider-container {
-    width: 80%;
-    margin: auto;
-}
-
-@media(max-width: 600px) {
-	.tab_container {
-    	width: 100%;
-	}
-}
-
-span.slider {
-    display: inline-block;
-    width: 15%;
-}
-
-.beginning-slider {
-    text-align: right;
-}
-
-.slider-container input {
-    width: 60%;
-    margin-left: 4.9%;
-    margin-right: 4.9%;
-}
-
-.ticks {
-    margin-bottom: -1.75em;
-}
-
-.tick {
-    display: inline-block;
-    margin-bottom: 0px;
-    width: 11.65%;
-}
-
-.tick:first-of-type {
-    margin-left: 32.3%;
 }

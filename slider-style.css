@@ -76,3 +76,37 @@ input[type=range]::-ms-thumb {
     cursor: pointer;
     height: 8.4px;
 }
+
+.slider-container {
+    width: 80%;
+    margin: auto;
+}
+
+span.slider {
+    display: inline-block;
+    width: 15%;
+}
+
+.beginning-slider {
+    text-align: right;
+}
+
+.slider-container input {
+    width: 60%;
+    margin-left: 4.9%;
+    margin-right: 4.9%;
+}
+
+.ticks {
+    margin-bottom: -1.75em;
+}
+
+.tick {
+    display: inline-block;
+    margin-bottom: 0px;
+    width: 11.65%;
+}
+
+.tick:first-of-type {
+    margin-left: 32.3%;
+}
