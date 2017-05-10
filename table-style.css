@@ -9,3 +9,56 @@
 	width: 25%;
 	float: left;
 }
+
+.um_itemlist {
+	list-style: none;
+	padding-left: 20px;
+	margin-top: 5px;
+}
+
+.checkbox_parent {
+	margin-left: 10px;
+}
+
+.label_parent {
+	font-size: 20pt;
+	margin-left: 5px;
+	font-family: "Arial";
+}
+
+.advanced_button {
+	width: 100%;
+	text-align: left;
+	background-color: white;
+	border: none;
+	color: black;
+	padding: 15px 32px;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-family: "Arial";
+	font-weight: bold;
+	margin-bottom: 30px;
+	cursor: pointer;
+	cursor: hand;
+	border-bottom: #cecece 3px solid;
+}
+
+.arrow-up {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #cecece;
+	float: right;
+}
+
+.arrow-down {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #cecece;
+	float: right;
+}
+

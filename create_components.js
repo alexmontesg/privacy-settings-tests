@@ -1,17 +1,3 @@
-/*
- write_advanced();
- $(".advanced").toggle();
-
- $(".advanced-btn").on("click", function() {
- $(".advanced").toggle();
- var rotation = 0;
- if($(".advanced").is(":visible")) {
- rotation = 180;
- }
- $(".advanced-btn .caret").css("transform", "rotate(" + rotation + "deg)");
- });
- */
-
 var component_creator = (function() {
 	var instance;
 	var VARIABLES = {
@@ -56,9 +42,46 @@ var component_creator = (function() {
 		}
 		return element;
 	}
+	
+	function toggleAdvanced() {
+		var cols = document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("col-3");
+		var visibility = document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("col-3")[0].style.display == "block";
+		if(visibility) {
+			document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-up")[0].className = "arrow-down";
+			for(var i = 0; i < cols.length; i++) {
+				cols[i].style.display = "none";
+			}
+		} else {
+			document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-down")[0].className = "arrow-up";
+			for(var i = 0; i < cols.length; i++) {
+				cols[i].style.display = "block";
+			}
+		}
+	}
 
 	function addEventToElement(element, trigger, event) {
 		element.addEventListener(trigger, event);
+	}
+	
+	function addDomainToTable(key) {
+		var ul = createElement("ul", {
+			"class" : "um_itemlist"
+		});
+		for (var i = 0; i < Object.keys(VARIABLES[key]).length; i++) {
+			var item = Object.keys(VARIABLES[key])[i];
+			var value = VARIABLES[key][item];
+			var li = createElement("li");
+			li.appendChild(createElement("input", {
+				"type": "checkbox",
+				"id": "checkbox_" + item,
+				"data-parent": "checkbox_" + key
+			}));
+			li.appendChild(createElement("label", {
+				"for" : "checkbox_" + item
+			}, item + ": " + value));
+			ul.appendChild(li);
+		}
+		return ul;
 	}
 
 	function createSlider() {
@@ -121,33 +144,38 @@ var component_creator = (function() {
 
 	function createTable() {
 		var container = createElement("div", {
-			"class" : "table-container row"
+			"class": "table-container row"
 		});
+		var dropdown = createElement("div", {
+			"class": "dropdown"
+		});
+		var button = createElement("button", {
+			"class": "advanced_button"
+		}, "Advanced Settings");
+		button.appendChild(createElement("span", {
+			"class": "arrow-down"
+		}));
+		addEventToElement(button, "click", toggleAdvanced);
+		dropdown.appendChild(button);
 		for (var i = 0; i < TYPES_VARIABLES; i++) {
 			var key = Object.keys(VARIABLES)[i];
 			var div = createElement("div", {
-				"class" : "col-3"
+				"class": "col-3",
+				"style": "display:none;"
 			});
-			div.appendChild(createElement("h3", {}, key));
-			var ul = createElement("ul", {
-				"class" : "um_itemlist"
-			});
-			for (var j = 0; j < Object.keys(VARIABLES[key]).length; j++) {
-				var item = Object.keys(VARIABLES[key])[j];
-				var value = VARIABLES[key][item];
-				var li = createElement("li");
-				li.appendChild(createElement("input", {
-					"type" : "checkbox",
-					"id" : "checkbox_" + key
-				}));
-				li.appendChild(createElement("label", {
-					"for" : "checkbox_" + key
-				}, item + ": " + value));
-				ul.appendChild(li);
-			}
-			div.appendChild(ul);
-			container.appendChild(div);
+			div.appendChild(createElement("input", {
+				"type": "checkbox",
+				"id": "checkbox_" + key,
+				"class": "checkbox_parent"
+			}));
+			div.appendChild(createElement("label", {
+				"for": "checkbox_" + key,
+				"class": "label_parent"
+			}, key));
+			div.appendChild(addDomainToTable(key));
+			dropdown.appendChild(div);
 		}
+		container.appendChild(dropdown);
 		return container;
 	}
 
