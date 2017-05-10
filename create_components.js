@@ -2,7 +2,7 @@ var component_creator = (function() {
 	var instance;
 	var VARIABLES = {
 		"History" : {
-			"Login page" : 5,
+			"Login_page" : 5,
 			"Videogames" : 2,
 			"Movies" : 5,
 			"Books" : 10
@@ -10,21 +10,21 @@ var component_creator = (function() {
 		"Demographic" : {
 			"Gender" : "Female",
 			"Age" : 28,
-			"Nationality" : "North Korean",
-			"Last connection" : "Pyongyang",
-			"Usually online" : "Afternoon"
+			"Nationality" : "North_Korean",
+			"Last_connection" : "Pyongyang",
+			"Usually_online" : "Afternoon"
 		},
 		"Ratings" : {
-			"Star Wars" : 3,
-			"To kill a Mockingbird" : 2,
+			"Star_Wars" : 3,
+			"To_kill_a_Mockingbird" : 2,
 			"Harry Potter" : 3,
-			"Fifa 17" : 1,
-			"Anecdotes of Kim Jong Il" : 5
+			"Fifa_17" : 1,
+			"Anecdotes_of_Kim_Jong_Il" : 5
 		},
 		"Financial" : {
-			"Yearly income" : 30000,
-			"Budget for presents" : 20,
-			"Budget for self present" : 500
+			"Yearly_income" : 30000,
+			"Budget_for presents" : 20,
+			"Budget_for_self_present" : 500
 		}
 	};
 	var TYPES_VARIABLES = Object.keys(VARIABLES).length;
@@ -41,6 +41,13 @@ var component_creator = (function() {
 			element.innerText = text;
 		}
 		return element;
+	}
+	
+	function checkBoxParentBehaviour(checkboxes) {
+		var checkboxes = document.querySelectorAll("[data-parent=" + checkboxes + "]");
+		for(var i = 0; i < checkboxes.length; i++) {
+			checkboxes[i].checked = !checkboxes[i].checked;
+		}
 	}
 	
 	function toggleAdvanced() {
@@ -60,10 +67,13 @@ var component_creator = (function() {
 	}
 
 	function addEventToElement(element, trigger, event) {
-		element.addEventListener(trigger, event);
+		var args = arguments[3];
+		element.addEventListener(trigger, function() {
+			event(args);
+		});
 	}
 	
-	function addDomainToTable(key) {
+	function addDomainVariablesToTable(key) {
 		var ul = createElement("ul", {
 			"class" : "um_itemlist"
 		});
@@ -73,7 +83,7 @@ var component_creator = (function() {
 			var li = createElement("li");
 			li.appendChild(createElement("input", {
 				"type": "checkbox",
-				"id": "checkbox_" + item,
+				"class": "checkbox_" + item,
 				"data-parent": "checkbox_" + key
 			}));
 			li.appendChild(createElement("label", {
@@ -82,6 +92,28 @@ var component_creator = (function() {
 			ul.appendChild(li);
 		}
 		return ul;
+	}
+	
+	function addDomainsToTable(dropdown) {
+		for (var i = 0; i < TYPES_VARIABLES; i++) {
+			var key = Object.keys(VARIABLES)[i];
+			var div = createElement("div", {
+				"class": "col-3",
+				"style": "display:none;"
+			});
+			var checkbox = createElement("input", {
+				"type": "checkbox",
+				"class": "checkbox_parent checkbox_" + key
+			});
+			addEventToElement(checkbox, "click", checkBoxParentBehaviour, "checkbox_" + key);
+			div.appendChild(checkbox);
+			div.appendChild(createElement("label", {
+				"for": "checkbox_" + key,
+				"class": "label_parent"
+			}, key));
+			div.appendChild(addDomainVariablesToTable(key));
+			dropdown.appendChild(div);
+		}
 	}
 
 	function createSlider() {
@@ -104,7 +136,7 @@ var component_creator = (function() {
 			"value" : 1
 		});
 		addEventToElement(slider, "change", function() {
-			document.getElementById("privacyExplanation").innerText = EXPLANATIONS[this.value];
+			document.getElementById("view0").getElementsByClassName("privacyExplanation")[0].innerText = EXPLANATIONS[this.value];
 		});
 		paragraph.appendChild(createElement("span", {
 			"class" : "slider beginning-slider"
@@ -115,7 +147,7 @@ var component_creator = (function() {
 		}, "Personalization"));
 		container.appendChild(paragraph);
 		container.appendChild(createElement("p", {
-			"id" : "privacyExplanation"
+			"class" : "privacyExplanation"
 		}, EXPLANATIONS[DEFAULT_SLIDER]));
 		return container;
 	}
@@ -136,7 +168,7 @@ var component_creator = (function() {
 		}));
 		paragraph.appendChild(i_switch);
 		container.appendChild(createElement("p", {
-			"id" : "switchExplanation"
+			"class" : "switchExplanation"
 		}, "Send data to server"));
 		container.appendChild(paragraph);
 		return container;
@@ -157,24 +189,7 @@ var component_creator = (function() {
 		}));
 		addEventToElement(button, "click", toggleAdvanced);
 		dropdown.appendChild(button);
-		for (var i = 0; i < TYPES_VARIABLES; i++) {
-			var key = Object.keys(VARIABLES)[i];
-			var div = createElement("div", {
-				"class": "col-3",
-				"style": "display:none;"
-			});
-			div.appendChild(createElement("input", {
-				"type": "checkbox",
-				"id": "checkbox_" + key,
-				"class": "checkbox_parent"
-			}));
-			div.appendChild(createElement("label", {
-				"for": "checkbox_" + key,
-				"class": "label_parent"
-			}, key));
-			div.appendChild(addDomainToTable(key));
-			dropdown.appendChild(div);
-		}
+		addDomainsToTable(dropdown);
 		container.appendChild(dropdown);
 		return container;
 	}
