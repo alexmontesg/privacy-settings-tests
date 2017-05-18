@@ -31,6 +31,7 @@ var component_creator = (function() {
 	var MAX_SLIDER = TYPES_VARIABLES + 1;
 	var DEFAULT_SLIDER = 1;
 	var EXPLANATIONS = ["No data about you is tracked", "All data is stored on your computer", "All data is stored on your computer, except your browsing history within this page, which will be shared with the server", "All data is stored on your computer, except your browsing history within this page and demographic information, which will be shared with the server", "All information will be sent to the server except your financial data", "All information is sent to the server"];
+	var SWITCH_EXPLANATIONS = ["Track data and store it in your computer", "Send browsing history to the server", "Send demographic information to the server", "Send ratings to the server", "Send financial information to the server"];
 
 	function createElement(tag, attributes, text) {
 		var element = document.createElement(tag);
@@ -51,15 +52,15 @@ var component_creator = (function() {
 	}
 	
 	function toggleAdvanced() {
-		var cols = document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("col-3");
-		var visibility = document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("col-3")[0].style.display == "block";
+		var cols = document.getElementById(arguments[0]).getElementsByClassName("dropdown")[0].getElementsByClassName("col-3");
+		var visibility = document.getElementById(arguments[0]).getElementsByClassName("dropdown")[0].getElementsByClassName("col-3")[0].style.display == "block";
 		if(visibility) {
-			document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-up")[0].className = "arrow-down";
+			document.getElementById(arguments[0]).getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-up")[0].className = "arrow-down";
 			for(var i = 0; i < cols.length; i++) {
 				cols[i].style.display = "none";
 			}
 		} else {
-			document.getElementById("view0").getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-down")[0].className = "arrow-up";
+			document.getElementById(arguments[0]).getElementsByClassName("dropdown")[0].getElementsByClassName("arrow-down")[0].className = "arrow-up";
 			for(var i = 0; i < cols.length; i++) {
 				cols[i].style.display = "block";
 			}
@@ -116,7 +117,7 @@ var component_creator = (function() {
 		}
 	}
 
-	function createSlider() {
+	function createSlider(view) {
 		var container = createElement("div", {
 			"class" : "slider-container row"
 		});
@@ -136,7 +137,7 @@ var component_creator = (function() {
 			"value" : 1
 		});
 		addEventToElement(slider, "change", function() {
-			document.getElementById("view0").getElementsByClassName("privacyExplanation")[0].innerText = EXPLANATIONS[this.value];
+			document.getElementById(view).getElementsByClassName("privacyExplanation")[0].innerText = EXPLANATIONS[slider.value];
 		});
 		paragraph.appendChild(createElement("span", {
 			"class" : "slider beginning-slider"
@@ -151,12 +152,21 @@ var component_creator = (function() {
 		}, EXPLANATIONS[DEFAULT_SLIDER]));
 		return container;
 	}
+	
+	function createSwitchs(view) {
+		var container = createElement("div", {
+			"class" : "switchs-container row"
+		});
+		for(var i = 0; i < SWITCH_EXPLANATIONS.length; i++) {
+			container.appendChild(createSwitch(view, SWITCH_EXPLANATIONS[i]));
+		}
+		return container;
+	}
 
-	function createSwitch() {
+	function createSwitch(view, label) {
 		var container = createElement("div", {
 			"class" : "switch-container row"
 		});
-		var paragraph = document.createElement("p");
 		var i_switch = createElement("label", {
 			"class" : "switch"
 		});
@@ -166,15 +176,19 @@ var component_creator = (function() {
 		i_switch.appendChild(createElement("div", {
 			"class" : "switch-slider round"
 		}));
-		paragraph.appendChild(i_switch);
-		container.appendChild(createElement("p", {
+		var paragraph = createElement("p", {
+			"class" : "switch-p"
+		});
+		var span = createElement("span", {
 			"class" : "switchExplanation"
-		}, "Send data to server"));
+		}, label);
+		paragraph.appendChild(span);
+		paragraph.appendChild(i_switch);
 		container.appendChild(paragraph);
 		return container;
 	}
 
-	function createTable() {
+	function createTable(view) {
 		var container = createElement("div", {
 			"class": "table-container row"
 		});
@@ -187,7 +201,7 @@ var component_creator = (function() {
 		button.appendChild(createElement("span", {
 			"class": "arrow-down"
 		}));
-		addEventToElement(button, "click", toggleAdvanced);
+		addEventToElement(button, "click", toggleAdvanced, view);
 		dropdown.appendChild(button);
 		addDomainsToTable(dropdown);
 		container.appendChild(dropdown);
@@ -197,7 +211,7 @@ var component_creator = (function() {
 	function createInstance() {
 		return {
 			createSlider : createSlider,
-			createSwitch : createSwitch,
+			createSwitchs : createSwitchs,
 			createTable : createTable
 		};
 	}

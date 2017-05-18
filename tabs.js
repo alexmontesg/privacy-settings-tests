@@ -4,8 +4,6 @@ var tabs = [{
     title : 'Interface 2',
 }, {
     title : 'Interface 3',
-}, {
-    title : 'Survey'
 }];
 
 var app = angular.module("usability_test", []);
